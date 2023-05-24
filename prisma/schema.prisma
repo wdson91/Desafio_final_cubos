@@ -10,19 +10,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Users{
-  id        Int      @id @default(autoincrement())
+model Users {
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
 
-model Categories{
-  id        Int      @id @default(autoincrement())
-  description      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt   
+model Categories {
+  id          Int        @id @default(autoincrement())
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @updatedAt
+  Produtos    Produtos[]
+}
+
+model Produtos {
+  id                 Int        @id @default(autoincrement())
+  descricao          String
+  quantidade_estoque Int
+  valor              Float
+  produto_imagem     String?
+  category           Categories @relation(fields: [categoria_id], references: [id])
+  categoria_id       Int
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime?  @updatedAt
+}
+
+model Clientes {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  email     String    @unique
+  cpf       String    @unique
+  cep       String?
+  rua       String?
+  numero    Int?
+  bairro    String?
+  cidade    String?
+  estado    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
