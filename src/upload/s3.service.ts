@@ -1,12 +1,13 @@
 
 
-import * as aws from 'aws-sdk';
+import { S3 } from '@aws-sdk/client-s3';
+
 
 async function s3Connect(): Promise<any> {
-    const endpoint = await new aws.Endpoint(process.env.S3_ENDPOINT);
 
-    const s3 = await new aws.S3({
-        endpoint,
+
+    const s3 = new S3({
+        endpoint: process.env.S3_ENDPOINT,
         credentials: {
             accessKeyId: process.env.B2_APPLICATION_KEY_ID,
             secretAccessKey: process.env.B2_APPLICATION_KEY,

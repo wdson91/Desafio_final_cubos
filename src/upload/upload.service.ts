@@ -1,9 +1,10 @@
 import { Injectable, Post } from '@nestjs/common';
 import * as B2 from 'backblaze-b2';
 import * as fs from 'fs';
-import * as aws from 'aws-sdk';
+import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { randomUUID } from 'crypto';
 import { json } from 'stream/consumers';
+import s3Connect from './s3.service';
 const axios = require('axios');
 
 
@@ -11,11 +12,9 @@ const axios = require('axios');
 @Injectable()
 export class UploadService {
 
-    async uploadImage(file: Express.Multer.File): Promise<string> {
-        const endpoint = new aws.Endpoint(process.env.S3_ENDPOINT);
-
-        const s3 = new aws.S3({
-            endpoint,
+    async uploadImage(file: Express.Multer.File): Promise<any> {
+        const s3Client = new S3Client({
+            endpoint: process.env.S3_ENDPOINT,
             credentials: {
                 accessKeyId: process.env.B2_APPLICATION_KEY_ID,
                 secretAccessKey: process.env.B2_APPLICATION_KEY,
@@ -29,38 +28,33 @@ export class UploadService {
 
 
 
+
+
+
+        // Lê o arquivo local
+        const data = await fs.readFileSync(file.path);
+
+        // Define o nome do arquivo no B2
+        const fileName = originalname;
+
+        // Realiza o upload para o B2
+
+        const time = new Date().getTime().toString();
+        const filename = `${randomUUID()}-${file.originalname}`;
+
+        const uploadParams = ({
+            Bucket: process.env.B2_BUCKET_NAME,
+            Key: `${filename}`,
+            Body: data,
+            ContentType: file.mimetype,
+
+        })
+        const uploadCommand = new PutObjectCommand(uploadParams);
         try {
-
-
-            const arquivos = await s3.listObjects({
-                Bucket: bucketName,
-            }).promise();
-
-            // Lê o arquivo local
-            const data = await fs.readFileSync(file.path);
-
-            // Define o nome do arquivo no B2
-            const fileName = originalname;
-
-            // Realiza o upload para o B2
-
-            const time = new Date().getTime().toString();
-            const filename = `${randomUUID()}-${file.originalname}`;
-            const arquivo = await s3.upload({
-
-                Bucket: process.env.B2_BUCKET_NAME,
-                Key: `${filename}`,
-                Body: data,
-                ContentType: file.mimetype,
-
-            }).promise()
-
-            console.log(arquivo);
-            return arquivo.Location
-
+            const response = await s3Client.send(uploadCommand);
+            console.log('Upload realizado com sucesso:', response);
         } catch (error) {
-            console.log(error);
-            throw new Error('Erro ao fazer o upload da imagem');
+            console.error('Erro ao fazer o upload:', error);
         } finally {
             // Remove o arquivo local após o upload
             await fs.rmSync(path);
@@ -68,46 +62,53 @@ export class UploadService {
     }
 
     async listarArquivos() {
-        const endpoint = new aws.Endpoint(process.env.S3_ENDPOINT);
-
-        const s3 = new aws.S3({
-            endpoint,
+        const s3Client = new S3Client({
+            endpoint: process.env.S3_ENDPOINT,
             credentials: {
                 accessKeyId: process.env.B2_APPLICATION_KEY_ID,
                 secretAccessKey: process.env.B2_APPLICATION_KEY,
             }
 
         })
-        const bucketName = process.env.B2_BUCKET_NAME;
-        const arquivos = await s3.listObjectsV2({
-            Bucket: bucketName,
-        }).promise();
 
-        return arquivos.Contents;
+        const listParams = {
+            Bucket: process.env.B2_BUCKET_NAME,
+        };
+        const listCommand = new ListObjectsV2Command(listParams);
+        try {
+            const response = await s3Client.send(listCommand);
+            console.log('Objetos no bucket:', response.Contents);
+        } catch (error) {
+            console.error('Erro ao listar objetos:', error);
+        }
+
+        return
     }
     async deleteArquivo(url: string) {
-        const endpoint = new aws.Endpoint(process.env.S3_ENDPOINT);
-
-        const s3 = new aws.S3({
-            endpoint,
+        const s3Client = new S3Client({
+            endpoint: process.env.S3_ENDPOINT,
             credentials: {
                 accessKeyId: process.env.B2_APPLICATION_KEY_ID,
                 secretAccessKey: process.env.B2_APPLICATION_KEY,
             }
 
         })
+
 
 
         const string2 = url.split('/')
         const string3 = string2[string2.length - 1]
+
+        const deleteParams = ({
+            Bucket: process.env.B2_BUCKET_NAME,
+            Key: `${string3}`,
+        })
+        const deleteCommand = new DeleteObjectCommand(deleteParams);
         try {
-            await s3.deleteObject({
-                Bucket: process.env.B2_BUCKET_NAME,
-                Key: `${string3}`,
-            }).promise();
+            const response = await s3Client.send(deleteCommand);
+            console.log('Objeto removido com sucesso:', response);
         } catch (error) {
-            console.log(error);
-            return error;
+            console.error('Erro ao remover objeto:', error);
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "Desafio-final-cubos-back",
+    "name": "nestjs-boilerplate",
     "version": "0.0.1",
     "description": "",
     "author": "",
@@ -14,6 +14,7 @@
         "start:prod": "node dist/main"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.338.0",
         "@nestjs/common": "^9.0.0",
         "@nestjs/core": "^9.0.0",
         "@nestjs/jwt": "^10.0.3",
@@ -22,7 +23,7 @@
         "@nestjs/platform-express": "^9.0.0",
         "@nestjs/throttler": "^4.0.0",
         "@prisma/client": "^4.14.1",
-        "aws-sdk": "^2.1383.0",
+        "aws-sdk": "^2.1385.0",
         "axios": "^1.4.0",
         "backblaze-b2": "^1.7.0",
         "bcrypt": "^5.1.0",
