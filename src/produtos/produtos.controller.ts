@@ -1,18 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProdutosService } from './produtos.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { UserId } from 'src/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadService } from 'src/upload/upload.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('produto')
 
 export class ProdutosController {
-  constructor(private readonly produtosService: ProdutosService) { }
+  constructor(private readonly produtosService: ProdutosService,
+    private upload: UploadService) { }
 
   @Post()
-  create(@UserId() id: number, @Body() createProdutoDto: CreateProdutoDto) {
+  @UseInterceptors(FileInterceptor('file'))
+  async create(@UserId() id: number, @UploadedFile() file: Express.Multer.File, @Body() createProdutoDto: CreateProdutoDto) {
+    console.log(createProdutoDto)
+
     return this.produtosService.create(createProdutoDto);
   }
 
