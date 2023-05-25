@@ -30,10 +30,10 @@ export class ClientesService {
 
   }
 
-  findAll() {
+  async findAll() {
 
     try {
-      const clientes = this.prismaService.clientes.findMany()
+      const clientes = await this.prismaService.clientes.findMany()
       return clientes
     } catch (error) {
       return { error: 'Erro ao buscar clientes' }
