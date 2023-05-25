@@ -60,12 +60,6 @@ export class ProdutosService {
     } catch (error) {
       throw new BadRequestException("Erro ao excluir produto")
     }
-    const produto = await this.prisma.produtos.findUnique({ where: { id: id } })
 
-    if (!produto) {
-      throw new NotFoundException(`Produto com id ${id} não encontrado`)
-    }
-
-    return produto
   }
 }
