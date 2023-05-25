@@ -13,7 +13,7 @@ export class ProdutosService {
 
     return await this.prisma.produtos.create({
       data:
-        { descricao: data.descricao, quantidade_estoque: data.quantidade_estoque, valor: data.valor, categoria_id: data.categoria_id }
+        { descricao: data.descricao, quantidade_estoque: data.quantidade_estoque, valor: data.valor, categoria_id: data.categoria_id, produto_imagem: data.imagem || null }
 
     });
 
