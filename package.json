@@ -12,8 +12,6 @@
         "start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main"
-
-
     },
     "dependencies": {
         "@nestjs/common": "^9.0.0",
@@ -22,6 +20,7 @@
         "@nestjs/mapped-types": "*",
         "@nestjs/passport": "^9.0.3",
         "@nestjs/platform-express": "^9.0.0",
+        "@nestjs/throttler": "^4.0.0",
         "@prisma/client": "^4.14.1",
         "aws-sdk": "^2.1383.0",
         "axios": "^1.4.0",

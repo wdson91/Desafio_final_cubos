@@ -13,6 +13,7 @@ import { UploadService } from './upload/upload.service';
 import { UploadModule } from './upload/upload.module';
 import { PedidosModule } from './pedidos/pedidos.module';
 import * as B2 from 'backblaze-b2';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 
 
@@ -21,7 +22,10 @@ import * as B2 from 'backblaze-b2';
 @Module({
   imports: [AuthModule, MulterModule.register({
     dest: '../uploads', // Define o diretório de armazenamento dos arquivos
-  }), UsersModule, ProdutosModule, ClientesModule, UploadModule, PedidosModule],
+  }), UsersModule, ProdutosModule, ClientesModule, UploadModule, PedidosModule, ThrottlerModule.forRoot({
+    ttl: 60,
+    limit: 10,
+  }),],
   controllers: [AppController, UsersController],
   providers: [AppService, UsersService, PrismaService, UploadService],
 })
