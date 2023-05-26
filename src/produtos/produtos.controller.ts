@@ -5,14 +5,13 @@ import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { UserId } from 'src/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadService } from 'src/upload/upload.service';
+
 
 @UseGuards(JwtAuthGuard)
 @Controller('produto')
 
 export class ProdutosController {
-  constructor(private readonly produtosService: ProdutosService,
-    private upload: UploadService) { }
+  constructor(private readonly produtosService: ProdutosService) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
