@@ -14,6 +14,7 @@ export class UploadService {
 
     async uploadImage(file: Express.Multer.File): Promise<any> {
         const s3Client = new S3Client({
+            region: "us-east-1",
             endpoint: process.env.S3_ENDPOINT,
             credentials: {
                 accessKeyId: process.env.B2_APPLICATION_KEY_ID,
@@ -93,7 +94,6 @@ export class UploadService {
             }
 
         })
-
 
 
         const string2 = url.split('/')
