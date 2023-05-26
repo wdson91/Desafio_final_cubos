@@ -15,23 +15,6 @@ export class PedidosController {
     return this.pedidosService.create(createPedidoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.pedidosService.findAll();
-  }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pedidosService.findOne(+id);
-  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePedidoDto: UpdatePedidoDto) {
-    return this.pedidosService.update(+id, updatePedidoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pedidosService.remove(+id);
-  }
 }
