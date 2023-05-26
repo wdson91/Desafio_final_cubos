@@ -29,9 +29,6 @@ import { GlobalExceptionFilter } from './global-exception.filter';
     limit: 10,
   }),],
   controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, PrismaService, {
-    provide: APP_FILTER,
-    useClass: GlobalExceptionFilter,
-  },],
+  providers: [AppService, UsersService, PrismaService],
 })
 export class AppModule { }
