@@ -16,6 +16,7 @@ import * as B2 from 'backblaze-b2';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './global-exception.filter';
+import { UploadService } from './upload/upload.service';
 
 
 
@@ -29,6 +30,6 @@ import { GlobalExceptionFilter } from './global-exception.filter';
     limit: 10,
   }),],
   controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, PrismaService],
+  providers: [AppService, UsersService, PrismaService, UploadService],
 })
 export class AppModule { }
