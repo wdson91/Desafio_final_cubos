@@ -79,19 +79,5 @@ export class PedidosService {
 
   }
 
-  findAll() {
-    return `This action returns all pedidos`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pedido`;
-  }
-
-  update(id: number, updatePedidoDto: UpdatePedidoDto) {
-    return `This action updates a #${id} pedido`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} pedido`;
-  }
 }
