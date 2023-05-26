@@ -9,8 +9,8 @@ import { PrismaService } from './prisma.service';
 import { ProdutosModule } from './produtos/produtos.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { UploadService } from './upload/upload.service';
-import { UploadModule } from './upload/upload.module';
+
+
 import { PedidosModule } from './pedidos/pedidos.module';
 import * as B2 from 'backblaze-b2';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -24,12 +24,12 @@ import { GlobalExceptionFilter } from './global-exception.filter';
 @Module({
   imports: [AuthModule, MulterModule.register({
     dest: '../uploads', // Define o diretório de armazenamento dos arquivos
-  }), UsersModule, ProdutosModule, ClientesModule, UploadModule, PedidosModule, ThrottlerModule.forRoot({
+  }), UsersModule, ProdutosModule, ClientesModule, PedidosModule, ThrottlerModule.forRoot({
     ttl: 60,
     limit: 10,
   }),],
   controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, PrismaService, UploadService, {
+  providers: [AppService, UsersService, PrismaService, {
     provide: APP_FILTER,
     useClass: GlobalExceptionFilter,
   },],
